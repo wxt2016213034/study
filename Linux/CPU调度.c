@@ -92,7 +92,7 @@ void main(void)
             
             // 设置优先级为 51，52。
             param[i].__sched_priority = 51 + i;
-            pthread_attr_setschedparam(&attr[i], ¶m[i]);
+            pthread_attr_setschedparam(&attr[i], &param[i]);
             
             // 设置线程属性：不要继承 main 线程的调度策略和优先级。
             pthread_attr_setinheritsched(&attr[i], PTHREAD_EXPLICIT_SCHED);

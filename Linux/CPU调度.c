@@ -14,7 +14,7 @@ void get_thread_info(const int thread_index)
 
     printf("\n====> thread_index = %d \n", thread_index);
 
-    pthread_getschedparam(pthread_self(), &policy, ¶m);
+    pthread_getschedparam(pthread_self(), &policy, &param);
     if (SCHED_OTHER == policy)
         printf("thread_index %d: SCHED_OTHER \n", thread_index);
     else if (SCHED_FIFO == policy)

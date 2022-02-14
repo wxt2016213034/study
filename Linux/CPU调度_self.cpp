@@ -8,7 +8,7 @@
 // std::mutex iomutex;
 void f(int num)
 {
- 
+    std::cout<<"start thread"<<num<<std::endl;
     sched_param sch;
     int policy; 
     while(1){

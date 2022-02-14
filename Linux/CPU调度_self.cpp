@@ -1,33 +1,33 @@
+#include <mutex>
 #include <iostream>
-#include <thread>
-#include <pthread>
-
-void get_thread_info(const int thread_index)
+#include <chrono>
+#include <cstring>
+#include <pthread.h>
+ 
+std::mutex iomutex;
+void f(int num)
 {
-    int policy;
-    struct sched_param param;
-
-    printf("\n====> thread_index = %d \n", thread_index);
-
-    pthread_getschedparam(pthread_self(), &policy, &param);
-    if (SCHED_OTHER == policy)
-        printf("thread_index %d: SCHED_OTHER \n", thread_index);
-    else if (SCHED_FIFO == policy)
-        printf("thread_index %d: SCHED_FIFO \n", thread_index);
-    else if (SCHED_RR == policy)
-        printf("thread_index %d: SCHED_RR \n", thread_index);
-
-    printf("thread_index %d: priority = %d \n", thread_index, param.sched_priority);
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+ 
+    sched_param sch;
+    int policy; 
+    pthread_getschedparam(pthread_self(), &policy, &sch);
+    std::lock_guard<std::mutex> lk(iomutex);
+    std::cout << "Thread " << num << " is executing at priority "
+              << sch.sched_priority << '\n';
 }
-
-
-void hello(){
-    std::cout<<"hello"<<std::endl;
-    get_thread_info(0);
-}
-
-int main(){
-    std::thread thread1(hello);
-    thread1.join();
-    return 0;
+ 
+int main()
+{
+    std::thread t1(f, 1), t2(f, 2);
+ 
+    sched_param sch;
+    int policy; 
+    pthread_getschedparam(t1.native_handle(), &policy, &sch);
+    sch.sched_priority = 20;
+    if (pthread_setschedparam(t1.native_handle(), SCHED_FIFO, &sch)) {
+        std::cout << "Failed to setschedparam: " << std::strerror(errno) << '\n';
+    }
+ 
+    t1.join(); t2.join();
 }

@@ -14,9 +14,9 @@ void f(int num)
     while(1){
     pthread_getschedparam(pthread_self(), &policy, &sch);
     // std::lock_guard<std::mutex> lk(iomutex);
-    std::this_thread::sleep_for(std::chrono::seconds(1));
     std::cout << "Thread " << num << " is executing at priority "
               << sch.sched_priority << '\n';
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 }
  

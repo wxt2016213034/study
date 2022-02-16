@@ -78,13 +78,13 @@ bool http_conn::read(){
 
     int byte_read = 0;
     while(true){
-        byte_read = recv(m_sockfd, m_read_buf+m_read_idx, READ_BUFFER_SIZE - m_read_idx);
+        byte_read = recv(m_sockfd, m_read_buf+m_read_idx, READ_BUFFER_SIZE - m_read_idx,0);
         if(byte_read == -1){
             if(errno == EAGAIN || errno == EWOULDBLOCK){
                 break;
             }
             return false;
-        }else if(byte_read == 0{
+        }else if(byte_read == 0){
             return false;
         }else{
             m_read_idx += byte_read;

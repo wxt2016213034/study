@@ -66,7 +66,7 @@ int main()
     sched_param sch;
     int policy; 
     pthread_getschedparam(t2.native_handle(), &policy, &sch);
-    sch.sched_priority = 20;
+    sch.sched_priority = 80;
     std::this_thread::sleep_for(std::chrono::seconds(5));
     std::cout<<"set"<<std::endl;
     if (pthread_setschedparam(t2.native_handle(), SCHED_FIFO, &sch)) {

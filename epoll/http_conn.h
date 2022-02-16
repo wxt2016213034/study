@@ -27,7 +27,8 @@ class http_conn{
 public:
     static int m_epollfd;       // 所有socket上的事件都被注册到同一个epoll内核事件中，所以设置成静态的
     static int m_user_count;    // 统计用户的数量
-
+    static const int READ_BUFFER_SIZE = 2048;
+    static const int WRITE_BUFFER_SIZE = 1024;
 public:
     http_conn();
     ~http_conn();
@@ -41,6 +42,9 @@ public:
 private:
     int m_sockfd;           // 该HTTP连接的socket和对方的socket地址
     sockaddr_in m_address;
+
+    char m_read_buf[READ_BUFFER_SIZE];
+    int m_read_idx;
 };
 
 
